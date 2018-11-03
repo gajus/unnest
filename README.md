@@ -14,7 +14,7 @@ Unnest solves the problem of translating hierarchical dataset into a collection 
 
 ### Example
 
-To illustrate a use case, consider an HTML document that describes event locations, datas and times:
+To illustrate a use case, consider an HTML document that describes event locations, dates and times:
 
 ```html
 <ul>
