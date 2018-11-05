@@ -85,7 +85,7 @@ We can extract the subject data from the document using [Surgeon](https://github
 
 ```
 
-The result is a hierarchical object describing the relevant properties of the HTML document:
+The result is a hierarchical object describing the relevant variables contained in the HTML document:
 
 ```json
 [

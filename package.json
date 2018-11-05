@@ -10,8 +10,8 @@
     ]
   },
   "dependencies": {
-    "dot-object": "^1.7.1",
-    "dot-wild": "^3.0.1"
+    "dot-wild": "^3.0.1",
+    "lodash": "^4.17.11"
   },
   "description": "Creates a cartesian product of properties identified using value pointers.",
   "devDependencies": {
@@ -37,7 +37,9 @@
     "node": ">=8.0"
   },
   "keywords": [
-    "array"
+    "array",
+    "cartesian",
+    "declarative"
   ],
   "license": "BSD-3-Clause",
   "main": "./dist/index.js",
@@ -67,5 +69,5 @@
     "lint": "eslint ./src ./test && flow",
     "test": "NODE_ENV=test nyc ava --verbose --serial"
   },
-  "version": "1.0.0"
+  "version": "2.0.0"
 }

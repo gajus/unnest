@@ -35,8 +35,6 @@ const isValuePointerChild = (key: string): boolean => {
   return key.includes('@');
 };
 
-let i = 0;
-
 const flatten = (input: Object) => {
   const flatInput = wild.flatten(input);
 
