@@ -1,11 +1,10 @@
 // @flow
 
+// eslint-disable-next-line import/no-namespace
 import * as wild from 'dot-wild';
 
-const getDeepestValuePointerKey = (flatInput: Object): string => {
+const getDeepestValuePointerKey = (flatInput: mixed): string => {
   const keys = Object.keys(flatInput);
-
-  const notFound = {};
 
   let deepestValuePointerKey;
   let deepestValuePointerDepth = 0;
@@ -31,11 +30,7 @@ const isDotKeyArray = (key: string): boolean => {
   return /\.\d+\./.test(key);
 };
 
-const isValuePointerChild = (key: string): boolean => {
-  return key.includes('@');
-};
-
-const flatten = (input: Object) => {
+const flatten = (input: mixed) => {
   const flatInput = wild.flatten(input);
 
   const keys = Object.keys(flatInput);
@@ -56,6 +51,10 @@ const flatten = (input: Object) => {
     }
   }
 
+  if (Object.keys(flatInput).length === 0) {
+    return [];
+  }
+
   const deepestValuePointerKey = getDeepestValuePointerKey(flatInput);
 
   if (isDotKeyArray(deepestValuePointerKey)) {
@@ -66,7 +65,7 @@ const flatten = (input: Object) => {
     const tokens = deepestValuePointerKey.split('.0.');
 
     if (tokens.length === 0) {
-      throw new Error('Unexpected state.');
+      return [];
     }
 
     const first = tokens[0];

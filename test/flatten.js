@@ -3,6 +3,14 @@
 import test from 'ava';
 import flatten from '../src/flatten';
 
+test('produces empty array out of empty object', (t) => {
+  const input = {};
+
+  const expected = [];
+
+  t.deepEqual(flatten(input), expected);
+});
+
 test('creates a cartesian product of pointer values', (t) => {
   const input = {
     '@date': 'foo',
@@ -26,7 +34,6 @@ test('creates a cartesian product of pointer values (depth 1)', (t) => {
       }
     ]
   };
-
 
   const expected = [
     {
@@ -104,20 +111,20 @@ test('does not unnest non-pointer arrays', (t) => {
       {
         '@date': [
           {
-            'time': 'baz0'
+            time: 'baz0'
           },
           {
-            'time': 'baz1'
+            time: 'baz1'
           }
         ]
       },
       {
         '@date': [
           {
-            'time': 'baz2'
+            time: 'baz2'
           },
           {
-            'time': 'baz3'
+            time: 'baz3'
           }
         ]
       }
@@ -128,10 +135,10 @@ test('does not unnest non-pointer arrays', (t) => {
     {
       '@date': [
         {
-          'time': 'baz0'
+          time: 'baz0'
         },
         {
-          'time': 'baz1'
+          time: 'baz1'
         }
       ],
       '@location': 'foo'
@@ -139,10 +146,10 @@ test('does not unnest non-pointer arrays', (t) => {
     {
       '@date': [
         {
-          'time': 'baz2'
+          time: 'baz2'
         },
         {
-          'time': 'baz3'
+          time: 'baz3'
         }
       ],
       '@location': 'foo'
