@@ -3,7 +3,10 @@
 // eslint-disable-next-line import/no-namespace
 import * as wild from 'dot-wild';
 
-const getDeepestValuePointerKey = (flatInput: mixed): string => {
+// eslint-disable-next-line flowtype/no-weak-types
+type InputType = Object;
+
+const getDeepestValuePointerKey = (flatInput: InputType): string => {
   const keys = Object.keys(flatInput);
 
   let deepestValuePointerKey;
@@ -30,7 +33,7 @@ const isDotKeyArray = (key: string): boolean => {
   return /\.\d+\./.test(key);
 };
 
-const flatten = (input: mixed) => {
+const flatten = (input: InputType) => {
   const flatInput = wild.flatten(input);
 
   const keys = Object.keys(flatInput);
