@@ -1,9 +1,9 @@
 // @flow
 
 import test from 'ava';
-import flatten from '../src/flatten';
+import flatten from '../../src/utilities/flatten';
 
-test('produces empty array out of empty object', (t) => {
+test('produces an empty array out of the empty object', (t) => {
   const input = {};
 
   const expected = [];
@@ -183,26 +183,27 @@ test('throws an error if input property has multiple value pointers', (t) => {
   }, 'Input property cannot have multiple value pointers.');
 });
 
-test('skips array property if it does not include the target pointer', (t) => {
+test('iterates array property if it does not include the target pointer', (t) => {
   const input = {
-    '@date': 'foo',
+    '@a': 'foo',
     children0: [
       {
-
+        '@b': 'bar0'
       },
       {
-        '@time': 'bar0'
+        '@c': 'bar1'
       }
     ]
   };
 
   const expected = [
     {
-      '@date': 'foo'
+      '@a': 'foo',
+      '@b': 'bar0'
     },
     {
-      '@date': 'foo',
-      '@time': 'bar0'
+      '@a': 'foo',
+      '@c': 'bar1'
     }
   ];
 

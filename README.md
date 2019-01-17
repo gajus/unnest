@@ -72,7 +72,7 @@ We want to extract location, date and time information into a collection of obje
 
 ```
 
-We can extract the subject data from the document using [Surgeon](https://github.com/gajus/surgeon). Surgeon uses declarative instructions to extract information out of HTML document, e.g.
+We can extract the subject data from the document using [Surgeon](https://github.com/gajus/surgeon). Surgeon uses declarative instructions to extract information out of a HTML document, e.g.
 
 ```yaml
 - sm .location
@@ -141,25 +141,34 @@ for (const locationDatum of locations) {
 
 ```
 
-Unnest replaces the last step with declarative instructions of how the document must be constructed using value pointers (object keys beginning with `@`):
-
--- @TODO This is not implemented.
+Unnest replaces the last step:
 
 ```js
-unnest({
-  date: '@date',
-  location: '@location',
-  time: '@time'
-}, input);
+import unnest from 'unnest';
+
+unnest(input);
+
+// [
+//   {
+//     "date": "bar0",
+//     "location": "foo",
+//     "time": "baz0"
+//   },
+//   {
+//     "date": "bar0",
+//     "location": "foo",
+//     "time": "baz1"
+//   },
+//   {
+//     "date": "bar1",
+//     "location": "foo",
+//     "time": "baz2"
+//   },
+//   {
+//     "date": "bar1",
+//     "location": "foo",
+//     "time": "baz3"
+//   }
+// ]
 
 ```
-
-Unnest will automatically create the desired collection structure based on the provided template.
-
-Refer to the test cases for further use-case examples.
-
-## Template
-
-Unnest input is an object defining the desired output structure.
-
-Template object property value is either another template or a value pointer (name of a property in the input document beginning with `@`).
