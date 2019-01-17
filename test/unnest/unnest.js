@@ -104,6 +104,37 @@ test('creates a cartesian product of pointer values (depth 2)', (t) => {
   t.deepEqual(unnest(input), expected);
 });
 
+test.only('strips parent non-pointer values', (t) => {
+  const input = {
+    member: {
+      '@date': 'foo',
+      children: [
+        {
+          '@time': 'bar0'
+        },
+        {
+          '@time': 'bar1'
+        }
+      ]
+    }
+  };
+
+  const expected = [
+    {
+      '@date': 'foo',
+      '@time': 'bar0'
+    },
+    {
+      '@date': 'foo',
+      '@time': 'bar1'
+    }
+  ];
+
+  console.log(unnest(input));
+
+  t.deepEqual(unnest(input), expected);
+});
+
 test('does not unnest non-pointer arrays', (t) => {
   const input = {
     '@location': 'foo',

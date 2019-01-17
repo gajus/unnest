@@ -178,24 +178,24 @@ unnest(input);
 
 // [
 //   {
-//     "date": "bar0",
-//     "location": "foo",
-//     "time": "baz0"
+//     "@date": "bar0",
+//     "@location": "foo",
+//     "@time": "baz0"
 //   },
 //   {
-//     "date": "bar0",
-//     "location": "foo",
-//     "time": "baz1"
+//     "@date": "bar0",
+//     "@location": "foo",
+//     "@time": "baz1"
 //   },
 //   {
-//     "date": "bar1",
-//     "location": "foo",
-//     "time": "baz2"
+//     "@date": "bar1",
+//     "@location": "foo",
+//     "@time": "baz2"
 //   },
 //   {
-//     "date": "bar1",
-//     "location": "foo",
-//     "time": "baz3"
+//     "@date": "bar1",
+//     "@location": "foo",
+//     "@time": "baz3"
 //   }
 // ]
 

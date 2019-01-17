@@ -35,6 +35,8 @@ const isDotKeyArray = (key: string): boolean => {
 const unnest = (tree: Object) => {
   const flatInput = wild.flatten(tree);
 
+  console.log('flatInput', flatInput);
+
   const keys = Object.keys(flatInput);
 
   for (const key of keys) {
