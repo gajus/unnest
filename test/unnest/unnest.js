@@ -104,7 +104,7 @@ test('creates a cartesian product of pointer values (depth 2)', (t) => {
   t.deepEqual(unnest(input), expected);
 });
 
-test.only('strips parent non-pointer values', (t) => {
+test('strips parent non-pointer values', (t) => {
   const input = {
     member: {
       '@date': 'foo',
@@ -129,8 +129,6 @@ test.only('strips parent non-pointer values', (t) => {
       '@time': 'bar1'
     }
   ];
-
-  console.log(unnest(input));
 
   t.deepEqual(unnest(input), expected);
 });

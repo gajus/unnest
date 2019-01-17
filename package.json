@@ -10,7 +10,9 @@
     ]
   },
   "dependencies": {
-    "dot-wild": "^3.0.1"
+    "common-prefix": "^1.1.0",
+    "dot-wild": "^3.0.1",
+    "lodash": "^4.17.11"
   },
   "description": "Creates a cartesian product of all properties identified using value-pointers.",
   "devDependencies": {

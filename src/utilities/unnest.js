@@ -2,6 +2,10 @@
 
 // eslint-disable-next-line import/no-namespace
 import * as wild from 'dot-wild';
+import findCommonPrefix from 'common-prefix';
+import {
+  mapKeys
+} from 'lodash';
 
 // eslint-disable-next-line flowtype/no-weak-types
 const getDeepestValuePointerKey = (flatInput: Object): string => {
@@ -33,9 +37,17 @@ const isDotKeyArray = (key: string): boolean => {
 
 // eslint-disable-next-line flowtype/no-weak-types
 const unnest = (tree: Object) => {
-  const flatInput = wild.flatten(tree);
+  let flatInput = wild.flatten(tree);
 
-  console.log('flatInput', flatInput);
+  const commonPrefix = findCommonPrefix(Object.keys(flatInput));
+
+  if (commonPrefix && commonPrefix.endsWith('.')) {
+    flatInput = mapKeys(flatInput, (value, key) => {
+      return key.slice(commonPrefix.length);
+    });
+  }
+
+  const normalisedTree = wild.expand(flatInput);
 
   const keys = Object.keys(flatInput);
 
@@ -63,7 +75,7 @@ const unnest = (tree: Object) => {
 
   if (isDotKeyArray(deepestValuePointerKey)) {
     if (deepestValuePointerKey.startsWith('@')) {
-      return tree;
+      return normalisedTree;
     }
 
     const tokens = deepestValuePointerKey.split(/\.\d+\./);
@@ -74,13 +86,13 @@ const unnest = (tree: Object) => {
 
     const first = tokens[0];
 
-    const descendents = wild.get(tree, first + '.*') || [];
+    const descendents = wild.get(normalisedTree, first + '.*') || [];
 
     const results = [];
 
     for (const descendent of descendents) {
       const result = unnest({
-        ...wild.remove(tree, first),
+        ...wild.remove(normalisedTree, first),
         ...descendent
       });
 
@@ -93,7 +105,7 @@ const unnest = (tree: Object) => {
 
     return results;
   } else {
-    return tree;
+    return normalisedTree;
   }
 };
 
