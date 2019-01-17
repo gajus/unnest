@@ -14,7 +14,7 @@ Unnest solves the problem of translating hierarchical dataset into a collection 
 
 ### Example
 
-To illustrate a use case, consider an HTML document that describes event locations, dates and times:
+To illustrate an example use case, consider an HTML document that describes event locations, dates and times:
 
 ```html
 <ul>
@@ -142,6 +142,8 @@ for (const locationDatum of locations) {
 ```
 
 Unnest replaces the last step with declarative instructions of how the document must be constructed using value pointers (object keys beginning with `@`):
+
+-- @TODO This is not implemented.
 
 ```js
 unnest({

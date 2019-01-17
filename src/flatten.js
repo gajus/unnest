@@ -65,7 +65,7 @@ const flatten = (input: InputType) => {
       return input;
     }
 
-    const tokens = deepestValuePointerKey.split('.0.');
+    const tokens = deepestValuePointerKey.split(/\.\d+\./);
 
     if (tokens.length === 0) {
       return [];
@@ -73,7 +73,7 @@ const flatten = (input: InputType) => {
 
     const first = tokens[0];
 
-    const descendents = wild.get(input, first + '.*');
+    const descendents = wild.get(input, first + '.*') || [];
 
     const results = [];
 

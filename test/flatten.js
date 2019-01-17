@@ -52,10 +52,10 @@ test('creates a cartesian product of pointer values (depth 1)', (t) => {
 test('creates a cartesian product of pointer values (depth 2)', (t) => {
   const input = {
     '@location': 'foo',
-    children: [
+    children0: [
       {
         '@date': 'bar0',
-        children: [
+        children1: [
           {
             '@time': 'baz0'
           },
@@ -66,7 +66,7 @@ test('creates a cartesian product of pointer values (depth 2)', (t) => {
       },
       {
         '@date': 'bar1',
-        children: [
+        children1: [
           {
             '@time': 'baz2'
           },
@@ -181,4 +181,30 @@ test('throws an error if input property has multiple value pointers', (t) => {
   t.throws(() => {
     flatten(input);
   }, 'Input property cannot have multiple value pointers.');
+});
+
+test('skips array property if it does not include the target pointer', (t) => {
+  const input = {
+    '@date': 'foo',
+    children0: [
+      {
+
+      },
+      {
+        '@time': 'bar0'
+      }
+    ]
+  };
+
+  const expected = [
+    {
+      '@date': 'foo'
+    },
+    {
+      '@date': 'foo',
+      '@time': 'bar0'
+    }
+  ];
+
+  t.deepEqual(flatten(input), expected);
 });
