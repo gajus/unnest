@@ -1,3 +1,3 @@
 // @flow
 
-export {default as unnest} from './utilities/unnest';
+export {default} from './utilities/unnest';
