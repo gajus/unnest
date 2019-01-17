@@ -6,7 +6,35 @@
 [![Canonical Code Style](https://img.shields.io/badge/code%20style-canonical-blue.svg?style=flat-square)](https://github.com/gajus/canonical)
 [![Twitter Follow](https://img.shields.io/twitter/follow/kuizinas.svg?style=social&label=Follow)](https://twitter.com/kuizinas)
 
-Creates a cartesian product of properties identified using value pointers.
+Creates a cartesian product of all properties identified using value pointers.
+
+## API
+
+```js
+/**
+ * @param {Object} tree A hierarchical data structure.
+ * @returns {Array} A cartesian product of all values identified using value-pointers in the input object.
+ */
+unnest(tree);
+
+```
+
+### Value-pointer
+
+In the context of Unnest, value-pointer refers to an object property whose key begins with `@`, e.g.
+
+```js
+{
+  '@foo': {
+    name: 'bar'
+  }
+}
+
+```
+
+`@foo` is a value-pointer.
+
+Data pointers are used to identify all members that are used to create the cartesian product.
 
 ## Use case
 

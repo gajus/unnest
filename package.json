@@ -10,10 +10,9 @@
     ]
   },
   "dependencies": {
-    "dot-wild": "^3.0.1",
-    "lodash": "^4.17.11"
+    "dot-wild": "^3.0.1"
   },
-  "description": "Creates a cartesian product of properties identified using value pointers.",
+  "description": "Creates a cartesian product of all properties identified using value-pointers.",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
@@ -38,8 +37,7 @@
   },
   "keywords": [
     "array",
-    "cartesian",
-    "declarative"
+    "cartesian"
   ],
   "license": "BSD-3-Clause",
   "main": "./dist/index.js",

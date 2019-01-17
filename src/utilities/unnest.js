@@ -1,108 +1,98 @@
 // @flow
 
-/* eslint-disable flowtype/no-weak-types */
+// eslint-disable-next-line import/no-namespace
+import * as wild from 'dot-wild';
 
-import {
-  groupBy,
-  pickBy,
-  mapKeys
-} from 'lodash';
-import type {
-  UnnestUserConfigurationType
-} from '../types';
-import expand from './expand';
-import flatten from './flatten';
+// eslint-disable-next-line flowtype/no-weak-types
+const getDeepestValuePointerKey = (flatInput: Object): string => {
+  const keys = Object.keys(flatInput);
 
-type TransformType = (input: Object, collection: $ReadOnlyArray<Object>) => Object;
+  let deepestValuePointerKey;
+  let deepestValuePointerDepth = 0;
 
-const createObjectUsingMatchingProperties = (subject: Object, rule: RegExp): Object => {
-  return pickBy(subject, (value, key) => {
-    return rule.test(key);
-  });
-};
+  for (const key of keys) {
+    const path = wild.tokenize(key);
+    const depth = path.length;
 
-const groupByConstraintKeyPrefix = (dataset: $ReadOnlyArray<Object>, rule: RegExp): $ReadOnlyArray<Object> => {
-  const groups = groupBy(dataset, (datum) => {
-    const constraint = createObjectUsingMatchingProperties(datum, rule);
-
-    return Object.keys(constraint).length ? JSON.stringify(constraint) : '-1';
-  });
-
-  // eslint-disable-next-line fp/no-delete
-  delete groups['-1'];
-
-  return Object.values(groups);
-};
-
-const createDataset = (dataset: $ReadOnlyArray<Object>, rule: RegExp, transform: TransformType) => {
-  const collections = groupByConstraintKeyPrefix(dataset, rule);
-
-  const results = [];
-
-  for (const collection of collections) {
-    if (!collection.length) {
-      throw new Error('Unexpected state.');
+    if (depth > deepestValuePointerDepth) {
+      deepestValuePointerDepth = depth;
+      deepestValuePointerKey = key;
     }
-
-    const constraint = createObjectUsingMatchingProperties(collection[0], rule);
-
-    const datum = transform(constraint, collection);
-
-    results.push(datum);
   }
 
-  return results;
+  if (!deepestValuePointerKey) {
+    throw new Error('Unexpected state.');
+  }
+
+  return deepestValuePointerKey;
 };
 
-const mapDescendents = (payload, hierarchy) => {
-  const hierarchyMemberIndex = hierarchy.findIndex((member) => {
-    return Object.keys(payload[0]).join(',').includes('@' + member.pointer);
-  });
+const isDotKeyArray = (key: string): boolean => {
+  return /\.\d+\./.test(key);
+};
 
-  if (hierarchyMemberIndex === -1) {
+// eslint-disable-next-line flowtype/no-weak-types
+const unnest = (tree: Object) => {
+  const flatInput = wild.flatten(tree);
+
+  const keys = Object.keys(flatInput);
+
+  for (const key of keys) {
+    const path = wild.tokenize(key);
+
+    const valuePointers = path.filter((crumb) => {
+      return crumb.startsWith('@');
+    });
+
+    if (valuePointers.length === 0) {
+      throw new Error('Input property must have a value pointer.');
+    }
+
+    if (valuePointers.length > 1) {
+      throw new Error('Input property cannot have multiple value pointers.');
+    }
+  }
+
+  if (Object.keys(flatInput).length === 0) {
     return [];
   }
 
-  const hierarchyMember = hierarchy[hierarchyMemberIndex];
+  const deepestValuePointerKey = getDeepestValuePointerKey(flatInput);
 
-  const pointerRegex = new RegExp('^@' + hierarchyMember.pointer + '(?:\\.|$)');
-
-  return createDataset(payload, pointerRegex, (constraint, children) => {
-    const member = expand(
-      mapKeys(
-        pickBy(constraint, (value, key) => {
-          return pointerRegex.test(key);
-        }),
-        (value, key) => {
-          return key.slice(1);
-        }
-      )
-    )[hierarchyMember.pointer];
-
-    let descendents = [];
-
-    if (children.length) {
-      descendents = mapDescendents(children, hierarchy.slice(hierarchyMemberIndex + 1));
+  if (isDotKeyArray(deepestValuePointerKey)) {
+    if (deepestValuePointerKey.startsWith('@')) {
+      return tree;
     }
 
-    return hierarchyMember.map(member, descendents);
-  });
+    const tokens = deepestValuePointerKey.split(/\.\d+\./);
+
+    if (tokens.length === 0) {
+      return [];
+    }
+
+    const first = tokens[0];
+
+    const descendents = wild.get(tree, first + '.*') || [];
+
+    const results = [];
+
+    for (const descendent of descendents) {
+      const result = unnest({
+        ...wild.remove(tree, first),
+        ...descendent
+      });
+
+      if (Array.isArray(result)) {
+        results.push(...result);
+      } else {
+        results.push(result);
+      }
+    }
+
+    return results;
+  } else {
+    return tree;
+  }
 };
 
-export default (nodes: $ReadOnlyArray<Object>, configuration: UnnestUserConfigurationType): $ReadOnlyArray<Object> => {
-  const hierarchy = configuration.hierarchy;
-
-  const payload = flatten({
-    payload: nodes
-  });
-
-  if (!Array.isArray(payload)) {
-    throw new TypeError('Unexpected state.');
-  }
-
-  if (payload.length === 0) {
-    return [];
-  }
-
-  return mapDescendents(payload, hierarchy);
-};
+export default unnest;
