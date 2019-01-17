@@ -232,10 +232,38 @@ test('throws an error if input property has multiple value pointers', (t) => {
   }, 'Input property cannot have multiple value pointers.');
 });
 
-test('iterates array property if it does not include the target pointer', (t) => {
+test('maps different value-pointers at the same depth', (t) => {
   const input = {
     '@a': 'foo',
     children0: [
+      {
+        '@b': 'bar0'
+      },
+      {
+        '@c': 'bar1'
+      }
+    ]
+  };
+
+  const expected = [
+    {
+      '@a': 'foo',
+      '@b': 'bar0'
+    },
+    {
+      '@a': 'foo',
+      '@c': 'bar1'
+    }
+  ];
+
+  t.deepEqual(unnest(input), expected);
+});
+
+test('ignores empty objects', (t) => {
+  const input = {
+    '@a': 'foo',
+    children0: [
+      {},
       {
         '@b': 'bar0'
       },

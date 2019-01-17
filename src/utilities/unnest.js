@@ -3,6 +3,7 @@
 // eslint-disable-next-line import/no-namespace
 import * as wild from 'dot-wild';
 import findCommonPrefix from 'common-prefix';
+import cleanDeep from 'clean-deep';
 import {
   mapKeys
 } from 'lodash';
@@ -41,7 +42,12 @@ const unnest = (tree: Object) => {
     throw new TypeError('Input must be a plain object.');
   }
 
-  let flatInput = wild.flatten(tree);
+  let normalisedTree = cleanDeep(tree, {
+    emptyArrays: false,
+    emptyStrings: false,
+    nullValues: false
+  });
+  let flatInput = wild.flatten(normalisedTree);
 
   const commonPrefix = findCommonPrefix(Object.keys(flatInput));
 
@@ -51,7 +57,7 @@ const unnest = (tree: Object) => {
     });
   }
 
-  const normalisedTree = wild.expand(flatInput);
+  normalisedTree = wild.expand(flatInput);
 
   const keys = Object.keys(flatInput);
 
