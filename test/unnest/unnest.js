@@ -22,6 +22,17 @@ test('creates a cartesian product of pointer values', (t) => {
   t.deepEqual(unnest(input), expected);
 });
 
+test('creates a cartesian product of pointer values (dot-notation)', (t) => {
+  const input = {
+    '@date.bar': 'bar',
+    '@date.foo': 'foo'
+  };
+
+  const expected = input;
+
+  t.deepEqual(unnest(input), expected);
+});
+
 test('creates a cartesian product of pointer values (depth 1)', (t) => {
   const input = {
     '@date': 'foo',

@@ -51,7 +51,7 @@ const unnest = (tree: Object) => {
 
   const commonPrefix = findCommonPrefix(Object.keys(flatInput));
 
-  if (commonPrefix && commonPrefix.endsWith('.')) {
+  if (commonPrefix && !commonPrefix.startsWith('@') && commonPrefix.endsWith('.')) {
     flatInput = mapKeys(flatInput, (value, key) => {
       return key.slice(commonPrefix.length);
     });
