@@ -188,6 +188,26 @@ test('does not unnest non-pointer arrays', (t) => {
   t.deepEqual(unnest(input), expected);
 });
 
+test('throws an error if input is an array', (t) => {
+  const input = [
+    {
+      '@date': 'foo',
+      children: [
+        {
+          '@time': 'bar0'
+        },
+        {
+          '@time': 'bar1'
+        }
+      ]
+    }
+  ];
+
+  t.throws(() => {
+    unnest(input);
+  }, 'Input must be a plain object.');
+});
+
 test('throws an error if input property does not have a value pointer', (t) => {
   const input = {
     '@date': 'foo',

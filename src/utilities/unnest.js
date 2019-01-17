@@ -37,6 +37,10 @@ const isDotKeyArray = (key: string): boolean => {
 
 // eslint-disable-next-line flowtype/no-weak-types
 const unnest = (tree: Object) => {
+  if (Array.isArray(tree)) {
+    throw new TypeError('Input must be a plain object.');
+  }
+
   let flatInput = wild.flatten(tree);
 
   const commonPrefix = findCommonPrefix(Object.keys(flatInput));
